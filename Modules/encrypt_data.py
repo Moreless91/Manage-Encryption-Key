@@ -84,7 +84,7 @@ class EncryptToFile:
         """Encode data answer to binary"""
         binary_data = answers_list[0].encode("ascii")
 
-        """Remove last 3 char if they are .bin"""
+        """Remove last 4 char if they are .bin"""
         filename = answers_list[1]
         if filename[-4:] == ".bin":
             filename = filename[:-4]
