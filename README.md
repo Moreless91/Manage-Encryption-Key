@@ -6,8 +6,6 @@ Powered by Python!
 
 ###### Code Formatting: autopep8 and black with 120 char length
 
-_Built by Caleb Rott_
-
 ## Features
 
 - Generate Encryption Key
