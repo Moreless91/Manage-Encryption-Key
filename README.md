@@ -47,7 +47,6 @@ pip list
     - Create an encryption key
         - This will create a .env file in the root of the directory
         - Do not rename/move this file, it's how the **python-dotenv** finds the key for encrypting/decrypting
-        - ![alt text](https://imgur.com/AF9bMvM)
     - Encrypt files
         - By default the script saves binary files to the **Data** folder
         - This can be updated using the **Settings** option
