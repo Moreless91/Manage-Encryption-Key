@@ -84,9 +84,14 @@ class EncryptToFile:
         """Encode data answer to binary"""
         binary_data = answers_list[0].encode("ascii")
 
+        """Remove last 3 char if they are .bin"""
+        filename = answers_list[1]
+        if filename[-4:] == ".bin":
+            filename = filename[:-4]
+
         cipher_suite = Fernet(key)
         ciphered_text = cipher_suite.encrypt(binary_data)
-        with open(self.data_path + answers_list[1] + ".bin", "wb") as file_object:
+        with open(self.data_path + filename + ".bin", "wb") as file_object:
             file_object.write(ciphered_text)
 
     def multiple_files_prompt(self):

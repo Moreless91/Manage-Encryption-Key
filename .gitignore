@@ -2,6 +2,7 @@
 .env
 env
 Modules/__pycache__
+Screenshots
 
 # Ignore files in Data folder except .gitkeep
 Data/*
