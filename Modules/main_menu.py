@@ -7,7 +7,7 @@ from Modules.settings import Settings
 class MainMenu:
     """This class is used setup the main menu options when launching the program"""
 
-    def __init__(self, user_input=None):
+    def __init__(self):
         self.user_input = None
 
     def main_menu_options(self):

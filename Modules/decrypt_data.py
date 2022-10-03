@@ -1,8 +1,6 @@
 import os
-import inquirer
 from dotenv import load_dotenv
 from cryptography.fernet import Fernet
-from Modules.clear_terminal import ClearTerminalText
 from Modules.settings import Settings
 
 
@@ -90,5 +88,5 @@ class DecryptFile:
 
     def user_done(self):
         """Prompt user for repsonse when they are ready to go back to the main menu"""
-        user_input = input('\nType "done" when finished: ')
+        input('\nType "done" when finished: ')
         return  # Return to Main Menu

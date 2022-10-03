@@ -11,8 +11,8 @@ def main():
         clear_text = ClearTerminalText()
         clear_text.clear_screen()
 
-        """Check for config.json"""
-        config_check = Settings()
+        """Check for existing config.json"""
+        Settings()
 
         """Check for existing key"""
         key_check = GenerateKey()

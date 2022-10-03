@@ -1,6 +1,5 @@
 import json
 import inquirer
-import regex as re
 from pathlib import Path
 from Modules.clear_terminal import ClearTerminalText
 

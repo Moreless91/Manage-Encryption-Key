@@ -64,7 +64,6 @@ class GenerateKey:
         """Generate new key"""
         for i in range(user_input):
             new_key = Fernet.generate_key()
-            cipher_suite = Fernet(new_key)
 
         """Return the last key generated"""
         return new_key
