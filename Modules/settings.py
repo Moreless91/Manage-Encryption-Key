@@ -8,18 +8,22 @@ class Settings:
     """This class is used to load and update the config file"""
 
     def __init__(self):
-        self.config_file = "Settings/config.json"
+        self.config_file: str = "Settings/config.json"
 
-        """Verify config file exists"""
-        config_path_check = Path(self.config_file)
-        if config_path_check.is_file():
-            pass
-        else:
-            print("Cannot find config.json in Settings/")
-            print("Exiting...")
-            exit()
+        def verify_config_exists():
+            """Verify config file exists"""
+            config_path_check = Path(self.config_file)
+            if config_path_check.is_file():
+                return True
+            else:
+                print("Cannot find config.json in Settings/")
+                print("Exiting...")
+                exit()
 
-    def settings(self):
+        # Verify config file exists
+        verify_config_exists()
+
+    def settings(self) -> dict[str, str]:
         """Load config file"""
         with open(self.config_file) as json_data_file:
             config_file = json.load(json_data_file)
@@ -30,8 +34,8 @@ class Settings:
         """Update config.json settings"""
 
         """Load config.json"""
-        config_file = Settings.settings(self)
-        binary_path = config_file["path_dir"]["data"]
+        config_file: dict[str, str] = Settings.settings(self)
+        binary_path: str = config_file["path_dir"]["data"]
 
         print("\n\tUpdate Settings:\n")
         questions = [
@@ -49,6 +53,7 @@ class Settings:
         """Outcome from option chosen"""
         if answer["settings_options"] == "--Main Menu--":
             print("Going to Main Menu")
+            return
 
         else:
             """Get new path from user"""
@@ -57,7 +62,7 @@ class Settings:
             """Write changes to config file"""
             Settings.update_binary_path(self, new_binary_path)
 
-    def get_new_binary_path(self, binary_path):
+    def get_new_binary_path(self, binary_path: str) -> str:
         """Update binary path save location"""
 
         """Clear terminal screen"""
@@ -73,7 +78,7 @@ class Settings:
 
         return new_binary_path
 
-    def update_binary_path(self, new_binary_path):
+    def update_binary_path(self, new_binary_path: str) -> None:
         """Check if user tried to cancel"""
         cancel_list = ["e", "exit", "quit", "exit()", "quit()", "cancel", "back"]
         if new_binary_path.lower() in cancel_list:

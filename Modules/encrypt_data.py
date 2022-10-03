@@ -12,16 +12,16 @@ class EncryptToFile:
     def __init__(self):
         """Load config file"""
         config_file = Settings()
-        config_file = config_file.settings()
-        self.data_path = config_file["path_dir"]["data"]
+        config_file: dict[str, str] = config_file.settings()
+        self.data_path: str = config_file["path_dir"]["data"]
 
     def create_binary_file_workflow(self):
         """Load key from .env"""
-        key = EncryptToFile.load_key(self)
+        key: str = EncryptToFile.load_key(self)
 
         while True:
             """Ask user for data to be encrypted and a filename"""
-            answers_list = EncryptToFile.ask_user_for_data(self)
+            answers_list: tuple[str, str] | None = EncryptToFile.ask_user_for_data(self)
 
             """If the user is trying to exit, the list will be None"""
             if answers_list == None:
@@ -34,7 +34,7 @@ class EncryptToFile:
             clear_screen()
 
             """Ask user if they have another file to encryt"""
-            user_action = EncryptToFile.multiple_files_prompt(self)
+            user_action: bool = EncryptToFile.multiple_files_prompt(self)
 
             """Clear terminal screen"""
             clear_screen()
@@ -42,7 +42,7 @@ class EncryptToFile:
             if user_action == False:
                 return  # Return to main menu
 
-    def load_key(self):
+    def load_key(self) -> str:
         """Load .env environment variables"""
         try:
             load_dotenv()
@@ -53,7 +53,7 @@ class EncryptToFile:
             print(f"There was an issue loading {e}! \nExiting...")
             exit()
 
-    def ask_user_for_data(self):
+    def ask_user_for_data(self) -> tuple[str, str] | None:
         """Ask user for data to be encrypted and a filename"""
         print("\n\tCreate Binary File:\n")
         print(f"NOTE: Binary files are saved in {self.data_path}\n")
@@ -67,17 +67,17 @@ class EncryptToFile:
 
         """Check if user tried to cancel"""
         if data.lower() in cancel_list:
-            return  # Return to main menu
+            return None  # Return to main menu
 
         filename = input("Enter a new filename to save data to: ")
         """Check if user tried to cancel"""
 
         if filename.lower() in cancel_list:
-            return  # Return to main menu
+            return None  # Return to main menu
 
         return data, filename
 
-    def create_file(self, key, answers_list):
+    def create_file(self, key: str, answers_list: tuple[str, str]) -> bool:
         """Create a file using key"""
 
         """Encode data answer to binary"""
@@ -93,7 +93,9 @@ class EncryptToFile:
         with open(self.data_path + filename + ".bin", "wb") as file_object:
             file_object.write(ciphered_text)
 
-    def multiple_files_prompt(self):
+        return True
+
+    def multiple_files_prompt(self) -> bool:
         """Setup menu to ask user if they would like to create an additional file"""
         print("\n\tCreate another encrypted file?:\n")
         questions = [
