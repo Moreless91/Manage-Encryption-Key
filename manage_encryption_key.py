@@ -1,5 +1,5 @@
 import time
-from Modules.clear_terminal import ClearTerminalText
+from Modules.clear_terminal import clear_screen
 from Modules.main_menu import MainMenu
 from Modules.generate_key import GenerateKey
 from Modules.settings import Settings
@@ -8,8 +8,7 @@ from Modules.settings import Settings
 def main():
     while True:
         """Clear terminal screen"""
-        clear_text = ClearTerminalText()
-        clear_text.clear_screen()
+        clear_screen()
 
         """Check for existing config.json"""
         Settings()
@@ -36,19 +35,19 @@ def main():
 
         """User input"""
         if user_input == "a":
-            clear_text.clear_screen()
+            clear_screen()
             main_menu.option_a()
             time.sleep(1)
         elif user_input == "b":
-            clear_text.clear_screen()
+            clear_screen()
             main_menu.option_b()
             time.sleep(1)
         elif user_input == "c":
-            clear_text.clear_screen()
+            clear_screen()
             main_menu.option_c()
             time.sleep(1)
         elif user_input == "d":
-            clear_text.clear_screen()
+            clear_screen()
             main_menu.option_d()
             time.sleep(1)
         elif user_input in exit_list:

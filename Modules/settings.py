@@ -1,7 +1,7 @@
 import json
 import inquirer
 from pathlib import Path
-from Modules.clear_terminal import ClearTerminalText
+from Modules.clear_terminal import clear_screen
 
 
 class Settings:
@@ -61,8 +61,7 @@ class Settings:
         """Update binary path save location"""
 
         """Clear terminal screen"""
-        clear_text = ClearTerminalText()
-        clear_text.clear_screen()
+        clear_screen()
 
         print("\n\tUpdate Binary Save Location:\n")
         print(f"Current Setting: {binary_path}\n")

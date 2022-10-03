@@ -2,16 +2,13 @@ import os
 import platform
 
 
-class ClearTerminalText:
-    """This class is used to clear the terminal window of text"""
+def clear_screen():
+    # This function is used to clear the terminal console's text
 
-    def clear_screen(self):
-        """Get OS Platform"""
-        platform_os = platform.system()
+    # Get OS Platform
+    platform_os = platform.system()
 
-        if platform_os == "Windows":
-            """Windows"""
-            return os.system("cls")
-        else:
-            """Linux"""
-            return os.system("clear")
+    if platform_os == "Windows":
+        return os.system("cls")
+    else:
+        return os.system("clear")

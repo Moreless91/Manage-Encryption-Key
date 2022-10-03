@@ -2,8 +2,8 @@ import os
 import inquirer
 from dotenv import load_dotenv
 from cryptography.fernet import Fernet
-from Modules.clear_terminal import ClearTerminalText
 from Modules.settings import Settings
+from Modules.clear_terminal import clear_screen
 
 
 class EncryptToFile:
@@ -31,14 +31,13 @@ class EncryptToFile:
             EncryptToFile.create_file(self, key, answers_list)
 
             """Clear terminal screen"""
-            clear_text = ClearTerminalText()
-            clear_text.clear_screen()
+            clear_screen()
 
             """Ask user if they have another file to encryt"""
             user_action = EncryptToFile.multiple_files_prompt(self)
 
             """Clear terminal screen"""
-            clear_text.clear_screen()
+            clear_screen()
 
             if user_action == False:
                 return  # Return to main menu
