@@ -15,7 +15,7 @@ class EncryptToFile:
         config_file: dict[str, str] = config_file.settings()
         self.data_path: str = config_file["path_dir"]["data"]
 
-    def create_binary_file_workflow(self):
+    def create_binary_file_workflow(self) -> None:
         """Load key from .env"""
         key: str = EncryptToFile.load_key(self)
 
@@ -77,7 +77,7 @@ class EncryptToFile:
 
         return data, filename
 
-    def create_file(self, key: str, answers_list: tuple[str, str]) -> bool:
+    def create_file(self, key: str, answers_list: tuple[str, str]) -> None:
         """Create a file using key"""
 
         """Encode data answer to binary"""
@@ -92,8 +92,6 @@ class EncryptToFile:
         ciphered_text = cipher_suite.encrypt(binary_data)
         with open(self.data_path + filename + ".bin", "wb") as file_object:
             file_object.write(ciphered_text)
-
-        return True
 
     def multiple_files_prompt(self) -> bool:
         """Setup menu to ask user if they would like to create an additional file"""

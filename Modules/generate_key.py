@@ -2,7 +2,7 @@ import inquirer
 from pathlib import Path
 from cryptography.fernet import Fernet
 from Modules.settings import Settings
-from typing import Optional, ByteString
+from typing import ByteString
 
 
 class GenerateKey:
@@ -24,7 +24,7 @@ class GenerateKey:
 
         return False
 
-    def create_key_workflow(self):
+    def create_key_workflow(self) -> None:
         """Workflow for creating a new a key"""
         if GenerateKey.check_for_existing_key(self) == True:
             print("\nAre you sure you want to overwrite your key?")
@@ -40,12 +40,12 @@ class GenerateKey:
         user_input: int = GenerateKey.get_iteration_amount(self)
 
         """Use random number to generate a new key XX amount of times"""
-        new_key: str = GenerateKey.generate_new_key(self, user_input)
+        new_key: ByteString = GenerateKey.generate_new_key(self, user_input)
 
         """Write key to file"""
         GenerateKey.write_key_to_file(self, new_key)
 
-    def get_iteration_amount(self) -> Optional[int]:
+    def get_iteration_amount(self) -> int:
         """Get amount of times user wants to generate a number"""
 
         """Get user response"""
@@ -73,7 +73,7 @@ class GenerateKey:
         """Return the last key generated"""
         return new_key
 
-    def write_key_to_file(self, new_key: str) -> bool:
+    def write_key_to_file(self, new_key: ByteString) -> None:
         """Write new key to file"""
 
         """Decode Binary to String"""
@@ -84,8 +84,6 @@ class GenerateKey:
         with open(".env", "w") as file:
             file.write(contents)
             print(f"Contents saved to: .env")
-
-        return True
 
     def overwrite_file_prompt(self) -> bool:
         """Setup menu to prompt for overwrite change"""

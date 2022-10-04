@@ -13,7 +13,7 @@ class DecryptFile:
         config_file: dict[str, str] = config_file.settings()
         self.data_path: str = config_file["path_dir"]["data"]
 
-    def decrypt_binary_file_workflow(self):
+    def decrypt_binary_file_workflow(self) -> None:
         """Load key from .env"""
         key: str = DecryptFile.load_key(self)
 
@@ -47,7 +47,7 @@ class DecryptFile:
 
         return filenames
 
-    def decrypt_files(self, key: str, file_list: list[str]):
+    def decrypt_files(self, key: str, file_list: list[str]) -> None:
         """Setup list for encrypted data"""
         encrypted_file_list = []
         encrypted_var_dict = {}
@@ -87,7 +87,7 @@ class DecryptFile:
         for file, result in encrypted_var_dict.items():
             print(f"{file : <40}{result : <40}")
 
-    def user_done(self):
+    def user_done(self) -> None:
         """Prompt user for response when they are ready to go back to the main menu"""
         input('\nType "done" when finished: ')
         return  # Return to Main Menu

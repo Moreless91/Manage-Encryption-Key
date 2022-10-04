@@ -15,9 +15,7 @@ def main():
 
         """Check for existing key"""
         key_check = GenerateKey()
-        if key_check.check_for_existing_key() == True:
-            pass
-        else:
+        if key_check.check_for_existing_key() == False:
             print("Encryption Key file not found!")
             print("Create new .env file")
             key_check.create_key_workflow()
