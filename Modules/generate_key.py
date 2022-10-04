@@ -3,6 +3,7 @@ from pathlib import Path
 from cryptography.fernet import Fernet
 from Modules.settings import Settings
 from typing import ByteString
+from Modules.base_logger import logger
 
 
 class GenerateKey:
@@ -20,6 +21,7 @@ class GenerateKey:
         if key.is_file():
             print(f" Key found in: .env")
             print(f" .bin save to: {self.data_path}")
+            logger.debug(f"Existing decryption key found: '{self.data_path}'")
             return True
 
         return False
@@ -28,14 +30,18 @@ class GenerateKey:
         """Workflow for creating a new a key"""
         if GenerateKey.check_for_existing_key(self) == True:
             print("\nAre you sure you want to overwrite your key?")
+            logger.info(f"Prompt user to overwrite existing decryption key")
 
             """Launch inquirer for user action"""
             user_action: bool = GenerateKey.overwrite_file_prompt(self)
+            logger.info(f"User response to overwrite file: '{user_action}'")
 
             if user_action == False:
+                logger.info(f"Returning to Main Menu")
                 print("Returning to Main Menu")
                 return
 
+        logger.info(f"User prompted to create a new key...")
         """Get amount of times user wants to generate a number"""
         user_input: int = GenerateKey.get_iteration_amount(self)
 
@@ -56,6 +62,7 @@ class GenerateKey:
                 print("NOTE: Only the last key randomly generated will be used!")
                 user_input = int(input("Type number: "))  # Verify input is a whole number only
                 if user_input > 0:  # Verify number is greater than '0'
+                    logger.debug(f"User chose: '{user_input}'")
                     break  # Exit While Loop
                 else:
                     user_input = None
@@ -67,10 +74,12 @@ class GenerateKey:
 
     def generate_new_key(self, user_input: int) -> ByteString:
         """Generate new key"""
+        logger.debug(f"Generating '{user_input}' keys...")
         for i in range(user_input):
             new_key = Fernet.generate_key()
 
         """Return the last key generated"""
+        logger.debug(f"Storing the last generated key...")
         return new_key
 
     def write_key_to_file(self, new_key: ByteString) -> None:
@@ -84,6 +93,9 @@ class GenerateKey:
         with open(".env", "w") as file:
             file.write(contents)
             print(f"Contents saved to: .env")
+
+        logger.info(f"New key has been saved to '.env'")
+        logger.info(f"Returning to Main Menu")
 
     def overwrite_file_prompt(self) -> bool:
         """Setup menu to prompt for overwrite change"""

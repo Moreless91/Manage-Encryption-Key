@@ -1,6 +1,7 @@
 import json
 import inquirer
 from pathlib import Path
+from Modules.base_logger import logger
 from Modules.clear_terminal import clear_screen
 
 
@@ -12,12 +13,14 @@ class Settings:
 
         def verify_config_exists():
             """Verify config file exists"""
+            logger.debug(f"Verifying '{self.config_file}' exists...")
             config_path_check = Path(self.config_file)
             if config_path_check.is_file():
+                logger.debug(f"Found '{self.config_file}'")
                 return True
             else:
-                print("Cannot find config.json in Settings/")
-                print("Exiting...")
+                logger.critical(f"Cannot find '{self.config_file}'")
+                logger.critical("Exiting...")
                 exit()
 
         # Verify config file exists
@@ -27,6 +30,8 @@ class Settings:
         """Load config file"""
         with open(self.config_file) as json_data_file:
             config_file = json.load(json_data_file)
+
+        logger.debug(f"'{self.config_file}' loaded")
 
         return config_file
 
@@ -52,6 +57,7 @@ class Settings:
 
         """Outcome from option chosen"""
         if answer["settings_options"] == "--Main Menu--":
+            logger.info(f"Returning to Main Menu")
             print("Going to Main Menu")
             return
 
@@ -102,5 +108,8 @@ class Settings:
 
             """Close file and maintain human readability"""
             jsonFile.seek(0)  # <--- should reset file position to the beginning
-            json.dump(config_file, jsonFile, indent=4)  # <--- should make human readoble
+            json.dump(config_file, jsonFile, indent=4)  # <--- should make human readable
             jsonFile.truncate()
+
+        logger.info(f"New path '{new_binary_path}' has been saved to '{self.config_file}'")
+        logger.info(f"Returning to Main Menu")

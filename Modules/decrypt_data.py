@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from cryptography.fernet import Fernet
 from Modules.settings import Settings
+from Modules.base_logger import logger
 
 
 class DecryptFile:
@@ -31,16 +32,20 @@ class DecryptFile:
         try:
             load_dotenv()
             key = os.environ["DECRYPTION_KEY"]
+            logger.info(f"Decryption key loaded")
             return key
 
         except Exception as e:
             print(f"There was an issue loading {e}! \nExiting...")
+            logger.critical(f"There was an issue loading {e}!")
+            logger.critical(f"Exiting...")
             exit()
 
     def get_files(self) -> list[str]:
         """Build list of files in the Queued directory"""
         file_list = []
 
+        logger.info(f"Getting list of filenames in '{self.data_path}'")
         for (dirpath, dirnames, filenames) in os.walk(self.data_path):
             file_list.extend(filenames)
             break
@@ -71,11 +76,13 @@ class DecryptFile:
 
                 """Add filename and data to dictionary"""
                 encrypted_var_dict[file] = encrypted_item
+                logger.info(f"Successfully decrypted item: '{file}'")
             except:
                 """Add filename and data to dictionary"""
                 # it's possible a new key was generated and it won't be able to decrypt
                 # the old .bin files in the folder
                 encrypted_var_dict[file] = "Decryption FAIL"
+                logger.info(f"Failed to decrypt item: '{file}'")
 
         """Setup variables for printing"""
         Filename = "Filename:"
@@ -90,4 +97,6 @@ class DecryptFile:
     def user_done(self) -> None:
         """Prompt user for response when they are ready to go back to the main menu"""
         input('\nType "done" when finished: ')
+        logger.info(f"User finished reviewing data")
+        logger.info(f"Returning to Main Menu")
         return  # Return to Main Menu

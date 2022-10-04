@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from cryptography.fernet import Fernet
 from Modules.settings import Settings
 from Modules.clear_terminal import clear_screen
+from Modules.base_logger import logger
 
 
 class EncryptToFile:
@@ -47,10 +48,13 @@ class EncryptToFile:
         try:
             load_dotenv()
             key = os.environ["DECRYPTION_KEY"]
+            logger.info("Encryption key loaded")
             return key
 
         except Exception as e:
             print(f"There was an issue loading {e}! \nExiting...")
+            logger.critical(f"There was an issue loading {e}!")
+            logger.critical(f"Exiting...")
             exit()
 
     def ask_user_for_data(self) -> tuple[str, str] | None:
@@ -63,16 +67,24 @@ class EncryptToFile:
         cancel_list = ["e", "exit", "quit", "exit()", "quit()", "cancel", "back"]
 
         """Get user response"""
+        logger.info(f"User prompted to enter data to encrypt...")
         data = input("Enter the text you'd like to encrypt: ")
+        logger.info(f"Response recorded")
 
         """Check if user tried to cancel"""
         if data.lower() in cancel_list:
+            logger.info(f"User canceled action")
+            logger.info(f"Returning to Main Menu")
             return None  # Return to main menu
 
+        logger.info(f"User prompted to enter a filename to save to...")
         filename = input("Enter a new filename to save data to: ")
-        """Check if user tried to cancel"""
+        logger.info(f"Response recorded")
 
+        """Check if user tried to cancel"""
         if filename.lower() in cancel_list:
+            logger.info(f"User canceled action")
+            logger.info(f"Returning to Main Menu")
             return None  # Return to main menu
 
         return data, filename
@@ -82,6 +94,7 @@ class EncryptToFile:
 
         """Encode data answer to binary"""
         binary_data = answers_list[0].encode("ascii")
+        logger.debug(f"Encoded data")
 
         """Remove last 4 char if they are .bin"""
         filename = answers_list[1]
@@ -90,8 +103,11 @@ class EncryptToFile:
 
         cipher_suite = Fernet(key)
         ciphered_text = cipher_suite.encrypt(binary_data)
-        with open(self.data_path + filename + ".bin", "wb") as file_object:
+        logger.info(f"Encrypted data")
+
+        with open(f"{self.data_path}{filename}.bin", "wb") as file_object:
             file_object.write(ciphered_text)
+        logger.info(f"Data saved to '{self.data_path}{filename}.bin'")
 
     def multiple_files_prompt(self) -> bool:
         """Setup menu to ask user if they would like to create an additional file"""
@@ -109,6 +125,9 @@ class EncryptToFile:
         )
 
         if answer["multiple_files_options"] == "Yes":
+            logger.info(f"User chose to create another file...")
             return True
         else:
+            logger.info(f"User chose NOT create another file")
+            logger.info(f"Returning to Main Menu")
             return False

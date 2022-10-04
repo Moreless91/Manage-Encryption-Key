@@ -1,5 +1,6 @@
 import os
 import platform
+from Modules.base_logger import logger
 
 
 def clear_screen():
@@ -9,6 +10,8 @@ def clear_screen():
     platform_os: str = platform.system()
 
     if platform_os == "Windows":
+        logger.debug(f"Clearing terminal's text")
         return os.system("cls")
     else:
+        logger.debug(f"Clearing terminal's text")
         return os.system("clear")

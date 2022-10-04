@@ -7,3 +7,7 @@ Screenshots
 # Ignore files in Data folder except .gitkeep
 Data/*
 !Data/.gitkeep
+
+# Ignore files in Logs folder except .gitkeep
+Logs/*
+!Logs/.gitkeep
