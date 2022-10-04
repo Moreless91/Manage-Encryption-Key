@@ -31,6 +31,9 @@ def verify_config_exists(settings_location: str) -> None:
         with open("Logs/app.log", "w") as file1:
             # Writing data to a file
             file1.write(f"{msg1}\n{msg2}")
+
+        # Print to console
+        print(f"{msg1}\n{msg2}")
         exit()
 
 
