@@ -2,7 +2,7 @@
 .env
 env
 __pycache__
-Screenshots
+.coverage
 
 # Ignore files in Data folder except .gitkeep
 Data/*

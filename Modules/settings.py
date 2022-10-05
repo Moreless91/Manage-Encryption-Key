@@ -2,6 +2,7 @@ import json
 import inquirer
 from pathlib import Path
 from Modules.base_logger import logger
+from Modules.clear_terminal import clear_screen
 
 
 class Settings:
@@ -9,6 +10,26 @@ class Settings:
 
     def __init__(self):
         self.config_file: str = "Settings/config.json"
+
+    def update_settings_workflow(self) -> None:
+        Settings.verify_config_exists(self)
+        answer = Settings.update_settings_inquirer_prompt(self)
+        if answer == "--Main Menu--":
+            logger.info(f"Returning to Main Menu")
+            print("Going to Main Menu")
+            return
+        else:
+            # Get new path from user
+            clear_screen()
+            new_binary_path = Settings.get_new_binary_path(self)
+
+            # Format string
+            formatted_binary_path = Settings.format_binary_path(self, new_binary_path)
+
+            # Write changes to config file
+            Settings.update_binary_path(self, formatted_binary_path)
+            logger.info(f"Returning to Main Menu")
+            print("Going to Main Menu")
 
     def verify_config_exists(self) -> bool:
         """Verify config file exists"""

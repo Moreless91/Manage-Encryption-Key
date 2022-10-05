@@ -3,7 +3,7 @@ import platform
 from Modules.base_logger import logger
 
 
-def clear_screen():
+def clear_screen() -> int:
     # This function is used to clear the terminal console's text
 
     # Get OS Platform

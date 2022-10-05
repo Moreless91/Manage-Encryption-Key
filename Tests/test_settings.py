@@ -13,7 +13,7 @@ class TestSettings(unittest.TestCase):
     """This class is used to test functions in Modules/settings.py"""
 
     def test_1_init_verify_config_exists_1(self):
-        """Test that returned value type is boolean"""
+        """Test that returned value type is a boolean"""
         update_settings = Settings()
         result = update_settings.verify_config_exists()
 
