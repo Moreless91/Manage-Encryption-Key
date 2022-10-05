@@ -1,0 +1,10 @@
+{
+    "path_dir": {
+        "data": "Data/"
+    },
+    "logging": {
+        "level": "DEBUG",
+        "overwrite_log": true,
+        "log_location": "Logs/app.log"
+    }
+}

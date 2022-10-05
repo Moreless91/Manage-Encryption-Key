@@ -11,6 +11,7 @@ class DecryptFile:
     def __init__(self):
         """Load config file"""
         config_file = Settings()
+        config_file.verify_config_exists()
         config_file: dict[str, str] = config_file.settings()
         self.data_path: str = config_file["path_dir"]["data"]
 

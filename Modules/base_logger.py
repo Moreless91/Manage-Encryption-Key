@@ -7,10 +7,10 @@ from datetime import datetime
 """
 +------------------------------------------------------------------+
 |                         Log Level Chart:                         |
-|            DEBUG:   INFO:    WARNING:    ERROR:    CRITICAL:     |
+|            DEBUG:    INFO:    WARNING:    ERROR:    CRITICAL:    |
 | NOTSET                                                           |
-| DEBUG        X        X          X          X          X         |
-| INFO                  X          X          X          X         |
+| DEBUG        X         X         X          X          X         |
+| INFO                   X         X          X          X         |
 | WARNING                          X          X          X         |
 | ERROR                                       X          X         |
 | CRITICAL                                               X         |

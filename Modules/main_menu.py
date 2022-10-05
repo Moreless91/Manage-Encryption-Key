@@ -3,6 +3,7 @@ from Modules.encrypt_data import EncryptToFile
 from Modules.decrypt_data import DecryptFile
 from Modules.settings import Settings
 from Modules.base_logger import logger
+from Modules.clear_terminal import clear_screen
 
 
 class MainMenu:
@@ -40,4 +41,21 @@ class MainMenu:
         """Adjust Settings"""
         logger.info(f"Updating Settings...")
         update_settings = Settings()
-        update_settings.update_settings()
+        update_settings.verify_config_exists()
+        answer = update_settings.update_settings_inquirer_prompt()
+        if answer == "--Main Menu--":
+            logger.info(f"Returning to Main Menu")
+            print("Going to Main Menu")
+            return
+        else:
+            # Get new path from user
+            clear_screen()
+            new_binary_path = update_settings.get_new_binary_path()
+
+            # Format string
+            formatted_binary_path = update_settings.format_binary_path(new_binary_path)
+
+            # Write changes to config file
+            update_settings.update_binary_path(formatted_binary_path)
+            logger.info(f"Returning to Main Menu")
+            print("Going to Main Menu")

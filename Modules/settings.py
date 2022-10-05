@@ -2,7 +2,6 @@ import json
 import inquirer
 from pathlib import Path
 from Modules.base_logger import logger
-from Modules.clear_terminal import clear_screen
 
 
 class Settings:
@@ -11,23 +10,20 @@ class Settings:
     def __init__(self):
         self.config_file: str = "Settings/config.json"
 
-        def verify_config_exists():
-            """Verify config file exists"""
-            logger.debug(f"Verifying '{self.config_file}' exists...")
-            config_path_check = Path(self.config_file)
-            if config_path_check.is_file():
-                logger.debug(f"Found '{self.config_file}'")
-                return True
-            else:
-                logger.critical(f"Cannot find '{self.config_file}'")
-                logger.critical("Exiting...")
-                exit()
-
-        # Verify config file exists
-        verify_config_exists()
+    def verify_config_exists(self) -> bool:
+        """Verify config file exists"""
+        logger.debug(f"Verifying '{self.config_file}' exists...")
+        config_path_check = Path(self.config_file)
+        if config_path_check.is_file():
+            logger.debug(f"Found '{self.config_file}'")
+            return True
+        else:
+            logger.critical(f"Cannot find '{self.config_file}'")
+            logger.critical("Exiting...")
+            exit()
 
     def settings(self) -> dict[str, str]:
-        """Load config file"""
+        """Load config file into dictionary"""
         with open(self.config_file) as json_data_file:
             config_file = json.load(json_data_file)
 
@@ -35,12 +31,8 @@ class Settings:
 
         return config_file
 
-    def update_settings(self):
-        """Update config.json settings"""
-
-        """Load config.json"""
-        config_file: dict[str, str] = Settings.settings(self)
-        binary_path: str = config_file["path_dir"]["data"]
+    def update_settings_inquirer_prompt(self) -> str:
+        """Update config.json settings prompt"""
 
         print("\n\tUpdate Settings:\n")
         questions = [
@@ -56,23 +48,16 @@ class Settings:
         )
 
         """Outcome from option chosen"""
-        if answer["settings_options"] == "--Main Menu--":
-            logger.info(f"Returning to Main Menu")
-            print("Going to Main Menu")
-            return
+        answer = answer["settings_options"]
 
-        else:
-            """Get new path from user"""
-            new_binary_path = Settings.get_new_binary_path(self, binary_path)
+        return answer
 
-            """Write changes to config file"""
-            Settings.update_binary_path(self, new_binary_path)
-
-    def get_new_binary_path(self, binary_path: str) -> str:
+    def get_new_binary_path(self) -> str:
         """Update binary path save location"""
 
-        """Clear terminal screen"""
-        clear_screen()
+        """Load config.json"""
+        config_file: dict[str, str] = Settings.settings(self)
+        binary_path: str = config_file["path_dir"]["data"]
 
         print("\n\tUpdate Binary Save Location:\n")
         print(f"Current Setting: {binary_path}\n")
@@ -84,7 +69,7 @@ class Settings:
 
         return new_binary_path
 
-    def update_binary_path(self, new_binary_path: str) -> None:
+    def format_binary_path(self, new_binary_path: str) -> str | None:
         """Check if user tried to cancel"""
         cancel_list = ["e", "exit", "quit", "exit()", "quit()", "cancel", "back"]
         if new_binary_path.lower() in cancel_list:
@@ -99,17 +84,19 @@ class Settings:
         new_binary_path = new_binary_path.replace("\\", "/")
         new_binary_path = new_binary_path.replace("//", "/")  # Data\ becomes Data/ and NOT Data//
 
+        return new_binary_path
+
+    def update_binary_path(self, formatted_binary_path: str) -> None:
         """Write answer to config.json"""
         with open(self.config_file, "r+") as jsonFile:
             config_file = json.load(jsonFile)
 
             """Update config file item"""
-            config_file["path_dir"]["data"] = new_binary_path
+            config_file["path_dir"]["data"] = formatted_binary_path
 
             """Close file and maintain human readability"""
             jsonFile.seek(0)  # <--- should reset file position to the beginning
             json.dump(config_file, jsonFile, indent=4)  # <--- should make human readable
             jsonFile.truncate()
 
-        logger.info(f"New path '{new_binary_path}' has been saved to '{self.config_file}'")
-        logger.info(f"Returning to Main Menu")
+        logger.info(f"New path '{formatted_binary_path}' has been saved to '{self.config_file}'")
