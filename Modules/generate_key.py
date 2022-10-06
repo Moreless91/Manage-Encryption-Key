@@ -7,7 +7,7 @@ from Modules.base_logger import logger
 
 
 class GenerateKey:
-    """This class is used to generate a new encryption key and save it to file"""
+    """This class is used to generate a new encryption key and save it to a file"""
 
     def __init__(self):
         """Load config file"""
@@ -15,6 +15,9 @@ class GenerateKey:
         config_file.verify_config_exists()
         config_file: dict[str, str] = config_file.settings()
         self.data_path: str = config_file["path_dir"]["data"]
+        self.env_path = ".env"
+
+        self.RUNNING = True  # This used for testing the While Loop for unittest
 
     def check_for_existing_key(self) -> bool:
         """Check the Key folder for an existing key"""
@@ -57,7 +60,8 @@ class GenerateKey:
 
         """Get user response"""
         user_input = None
-        while True:
+
+        while self.RUNNING:
             try:
                 print("Type the number of times a key will be randomly generated")
                 print("NOTE: Only the last key randomly generated will be used!")
@@ -91,11 +95,11 @@ class GenerateKey:
 
         contents = f"DECRYPTION_KEY={new_key}"
 
-        with open(".env", "w") as file:
+        with open(self.env_path, "w") as file:
             file.write(contents)
-            print(f"Contents saved to: .env")
+            print(f"Contents saved to: {self.env_path}")
 
-        logger.info(f"New key has been saved to '.env'")
+        logger.info(f"New key has been saved to '{self.env_path}'")
         logger.info(f"Returning to Main Menu")
 
     def overwrite_file_prompt(self) -> bool:
