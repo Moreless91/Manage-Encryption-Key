@@ -16,6 +16,7 @@ class EncryptToFile:
         config_file.verify_config_exists()
         config_file: dict[str, str] = config_file.settings()
         self.data_path: str = config_file["path_dir"]["data"]
+        self.dotenv_path = ".env"  # file in root directory
 
     def create_binary_file_workflow(self) -> None:
         """Load key from .env"""
@@ -47,7 +48,7 @@ class EncryptToFile:
     def load_key(self) -> str:
         """Load .env environment variables"""
         try:
-            load_dotenv()
+            load_dotenv(self.dotenv_path)
             key = os.environ["DECRYPTION_KEY"]
             logger.info("Encryption key loaded")
             return key
@@ -65,17 +66,14 @@ class EncryptToFile:
         print('Type data and press "ENTER"\n')
         print("\nTo cancel, type: back\n")
 
-        cancel_list = ["e", "exit", "quit", "exit()", "quit()", "cancel", "back"]
-
         """Get user response"""
         logger.info(f"User prompted to enter data to encrypt...")
         data = input("Enter the text you'd like to encrypt: ")
         logger.info(f"Response recorded")
 
         """Check if user tried to cancel"""
-        if data.lower() in cancel_list:
-            logger.info(f"User canceled action")
-            logger.info(f"Returning to Main Menu")
+        user_cancelled = EncryptToFile.check_cancel_list(self, data)
+        if user_cancelled == True:
             return None  # Return to main menu
 
         logger.info(f"User prompted to enter a filename to save to...")
@@ -83,12 +81,18 @@ class EncryptToFile:
         logger.info(f"Response recorded")
 
         """Check if user tried to cancel"""
-        if filename.lower() in cancel_list:
-            logger.info(f"User canceled action")
-            logger.info(f"Returning to Main Menu")
+        user_cancelled = EncryptToFile.check_cancel_list(self, filename)
+        if user_cancelled == True:
             return None  # Return to main menu
 
         return data, filename
+
+    def check_cancel_list(self, user_input: str) -> bool | None:
+        cancel_list = ["e", "exit", "quit", "exit()", "quit()", "cancel", "back"]
+        if user_input.lower() in cancel_list:
+            logger.info(f"User canceled action")
+            logger.info(f"Returning to Main Menu")
+            return True
 
     def create_file(self, key: str, answers_list: tuple[str, str]) -> None:
         """Create a file using key"""
@@ -98,9 +102,7 @@ class EncryptToFile:
         logger.debug(f"Encoded data")
 
         """Remove last 4 char if they are .bin"""
-        filename = answers_list[1]
-        if filename[-4:] == ".bin":
-            filename = filename[:-4]
+        filename = EncryptToFile.remove_extension(self, answers_list)
 
         cipher_suite = Fernet(key)
         ciphered_text = cipher_suite.encrypt(binary_data)
@@ -109,6 +111,13 @@ class EncryptToFile:
         with open(f"{self.data_path}{filename}.bin", "wb") as file_object:
             file_object.write(ciphered_text)
         logger.info(f"Data saved to '{self.data_path}{filename}.bin'")
+
+    def remove_extension(self, answers_list: tuple[str, str]) -> str:
+        filename = answers_list[1]
+        if filename[-4:] == ".bin":
+            filename = filename[:-4]
+
+        return filename
 
     def multiple_files_prompt(self) -> bool:
         """Setup menu to ask user if they would like to create an additional file"""
