@@ -56,12 +56,12 @@ class TestGenerateKey(unittest.TestCase):
         mock_key: bytes = b"zikiSlbESf_d8snWqiT9PvjbiyJuHY_EEblm-fvdFE4="
         file_exists = None
         key_check = GenerateKey()
-        key_check.env_path = "Tests/Mock_Data/.env"
+        key_check.dotenv_path = "Tests/Mock_Data/.env"
 
         key_check.write_key_to_file(mock_key)
 
         # Check if file was created
-        key = Path(key_check.env_path)
+        key = Path(key_check.dotenv_path)
         if key.is_file():
             file_exists = True
 

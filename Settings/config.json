@@ -1,6 +1,7 @@
 {
     "path_dir": {
-        "data": "Data/"
+        "data": "Data/",
+        "key": ".env"
     },
     "logging": {
         "level": "INFO",

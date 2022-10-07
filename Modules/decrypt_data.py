@@ -14,6 +14,7 @@ class DecryptFile:
         config_file.verify_config_exists()
         config_file: dict[str, str] = config_file.settings()
         self.data_path: str = config_file["path_dir"]["data"]
+        self.dotenv_path: str = config_file["path_dir"]["key"]
 
     def decrypt_binary_file_workflow(self) -> None:
         """Load key from .env"""
@@ -31,7 +32,7 @@ class DecryptFile:
     def load_key(self) -> str:
         """Load .env environment variables"""
         try:
-            load_dotenv()
+            load_dotenv(self.dotenv_path)
             key = os.environ["DECRYPTION_KEY"]
             logger.info(f"Decryption key loaded")
             return key

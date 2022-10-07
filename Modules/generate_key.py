@@ -15,7 +15,7 @@ class GenerateKey:
         config_file.verify_config_exists()
         config_file: dict[str, str] = config_file.settings()
         self.data_path: str = config_file["path_dir"]["data"]
-        self.env_path = ".env"
+        self.dotenv_path: str = config_file["path_dir"]["key"]
 
         self.RUNNING = True  # This used for testing the While Loop for unittest
 
@@ -95,11 +95,11 @@ class GenerateKey:
 
         contents = f"DECRYPTION_KEY={new_key}"
 
-        with open(self.env_path, "w") as file:
+        with open(self.dotenv_path, "w") as file:
             file.write(contents)
-            print(f"Contents saved to: {self.env_path}")
+            print(f"Contents saved to: {self.dotenv_path}")
 
-        logger.info(f"New key has been saved to '{self.env_path}'")
+        logger.info(f"New key has been saved to '{self.dotenv_path}'")
         logger.info(f"Returning to Main Menu")
 
     def overwrite_file_prompt(self) -> bool:
