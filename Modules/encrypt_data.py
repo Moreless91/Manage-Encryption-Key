@@ -16,7 +16,7 @@ class EncryptToFile:
         config_file.verify_config_exists()
         config_file: dict[str, str] = config_file.settings()
         self.data_path: str = config_file["path_dir"]["data"]
-        self.dotenv_path: str = config_file["path_dir"]["key"]  # file in root directory
+        self.dotenv_path: str = config_file["path_dir"]["key"]
 
     def create_binary_file_workflow(self) -> None:
         """Load key from .env"""
