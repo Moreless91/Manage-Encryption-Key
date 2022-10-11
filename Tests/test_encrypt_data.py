@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 import unittest
-from unittest.mock import patch, PropertyMock
+from unittest.mock import patch
 from Modules.encrypt_data import EncryptToFile
 
 # TO RUN TESTS:
@@ -30,6 +30,7 @@ class TestEncryptData(unittest.TestCase):
         self.assertEqual(path_result, mock_path, "Should be String: 'Data/'")
         self.assertEqual(key_path_result, mock_dotenv_path, "Should be String: 'Tests/Mock_Data/mock_.env'")
 
+    @patch.dict(os.environ, {"TEMP_VAR": "mytemp"}, clear=True)  # Clears os environmental variable
     def test_2_load_key_1(self):
         """Test loading missing .env"""
         mock_dotenv_path = ""
